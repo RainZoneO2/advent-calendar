@@ -1,19 +1,15 @@
 import type { Route } from "./+types/home";
+import { AdventGrid } from "~/components";
 
 export function loader() {
-  return { name: "React Router" };
+  return { currentDate: new Date() };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <div className="text-center p-4">
-      <h1 className="text-2xl">Hello, {loaderData.name}</h1>
-      <a
-        className="block mt-2 text-blue-500 underline hover:text-blue-600"
-        href="https://reactrouter.com/docs"
-      >
-        React Router Docs
-      </a>
-    </div>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">
+      <h1 className="text-3xl font-bold mb-6">Advent Calendar</h1>
+      <AdventGrid currentDate={loaderData.currentDate} />
+    </main>
   );
 }
