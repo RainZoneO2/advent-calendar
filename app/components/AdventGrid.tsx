@@ -1,4 +1,5 @@
 import { AdventCard } from "~/components";
+import { getImageForDay } from "~/utils/adventImages";
 
 type AdventGridProps = {
   currentDate: Date;
@@ -20,6 +21,7 @@ export default function AdventGrid({
         .map((day) => {
           const isUnlocked = currentDate.getDate() >= day;
           const isActive = activeCard === day;
+          const img = getImageForDay(day);
 
           return (
             <AdventCard
@@ -29,8 +31,21 @@ export default function AdventGrid({
               isUnlocked={isUnlocked}
               isActive={isActive}
               onClick={() => setActiveCard(isActive ? null : day)}
+              imageUrl={img}
             >
-              {isUnlocked ? <p> Unlocked!</p> : undefined}
+              {isUnlocked ? (
+                <>
+                  {img && (
+                    <img
+                      src={img}
+                      alt={`Day ${day}`}
+                      className="w-full h-24 object-cover rounded mb-2"
+                      loading="lazy"
+                    />
+                  )}
+                  <p>Unlocked!</p>
+                </>
+              ) : undefined}
             </AdventCard>
           );
         })}

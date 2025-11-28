@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Route } from "./+types/home";
 import { AdventCard, AdventGrid } from "~/components";
+import { getImageForDay } from "~/utils/adventImages";
 
 export function loader() {
   return { currentDate: new Date() };
@@ -8,6 +9,7 @@ export function loader() {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const [activeCard, setActiveCard] = useState<number | null>(null);
+  const activeImageUrl = activeCard ? getImageForDay(activeCard) : undefined;
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">
@@ -25,6 +27,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             isUnlocked={true}
             isActive={true}
             onClick={() => setActiveCard(null)}
+            imageUrl={activeImageUrl}
           ></AdventCard>
         </div>
       )}

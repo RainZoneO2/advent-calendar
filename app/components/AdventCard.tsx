@@ -9,6 +9,7 @@ type AdventCardProps = {
   onClick: () => void;
   children?: ReactNode;
   className?: string;
+  imageUrl?: string;
 };
 
 export default function AdventCard({
@@ -19,6 +20,7 @@ export default function AdventCard({
   onClick,
   children,
   className,
+  imageUrl,
 }: AdventCardProps) {
   const variant = isActive ? "overlay" : "grid";
   const baseClasses = "rounded-lg border transition";
@@ -37,7 +39,7 @@ export default function AdventCard({
       <p className="text-sm text-gray-400 italic">Locked until day {day}</p>
     );
   } else if (isActive) {
-    cardContent = <AdventMedia />;
+    cardContent = <AdventMedia imageUrl={imageUrl} day={day} />;
   } else {
     cardContent = <div className="text-sm text-gray-700">{children}</div>;
   }
