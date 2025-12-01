@@ -10,7 +10,7 @@ export type DayMedia = {
 };
 
 const modules = import.meta.glob(
-  "/app/media/calendar/images/*.{png,jpg,jpeg,webp}",
+  "/app/media/calendar/*.{png,jpg,jpeg,webp,mp4,webm,mp3,wav,ogg}",
   {
     eager: true,
     query: "?url",

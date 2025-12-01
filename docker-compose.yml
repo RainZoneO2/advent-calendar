@@ -1,0 +1,12 @@
+services:
+  advent-calendar:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./media/calendar:/app/public/media/calendar:ro
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped

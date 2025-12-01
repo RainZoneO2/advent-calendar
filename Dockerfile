@@ -19,4 +19,14 @@ COPY ./package.json package-lock.json /app/
 COPY --from=production-dependencies-env /app/node_modules /app/node_modules
 COPY --from=build-env /app/build /app/build
 WORKDIR /app
+
+# Create media directory for mounting
+RUN mkdir -p /app/public/media/calendar
+
+# Expose port 3000 for the application
+EXPOSE 3000
+
+# Volume mount point for user media
+VOLUME ["/app/public/media/calendar"]
+
 CMD ["npm", "run", "start"]
