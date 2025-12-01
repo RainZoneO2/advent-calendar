@@ -1,1 +1,123 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-advent-red: #c41e3a;
+    --color-advent-green: #165b33;
+    --color-advent-gold: #d4af37;
+    --color-advent-cream: #fef5e7;
+  }
+
+  body {
+    @apply bg-linear-to-b from-gray-50 to-gray-100;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Advent card styles */
+  .advent-card-unlocked {
+    @apply relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .advent-card-locked {
+    @apply opacity-50 cursor-not-allowed grayscale;
+  }
+
+  /* Animated shimmer for locked cards */
+  .advent-card-shimmer {
+    @apply relative;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+  }
+
+  /* Festive border glow for active card preview */
+  .advent-card-border-glow {
+    @apply border-2 border-transparent;
+    background-image:
+      linear-gradient(var(--color-advent-cream), var(--color-advent-cream)),
+      linear-gradient(
+        135deg,
+        var(--color-advent-red),
+        var(--color-advent-green)
+      );
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+}
+
+@layer utilities {
+  .blur-md-custom {
+    filter: blur(8px);
+  }
+
+  .text-advent-red {
+    color: var(--color-advent-red);
+  }
+
+  .text-advent-green {
+    color: var(--color-advent-green);
+  }
+
+  .bg-advent-red {
+    background-color: var(--color-advent-red);
+  }
+
+  .bg-advent-green {
+    background-color: var(--color-advent-green);
+  }
+
+  .shadow-advent {
+    box-shadow: 0 8px 16px rgba(196, 30, 58, 0.15);
+  }
+
+  .shadow-advent-lg {
+    box-shadow: 0 12px 24px rgba(196, 30, 58, 0.2);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(196, 30, 58, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(196, 30, 58, 0);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}

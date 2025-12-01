@@ -1,5 +1,5 @@
 import { AdventCard } from "~/components";
-import { getImageForDay } from "~/utils/adventImages";
+import { getMediaForDay } from "~/utils/mediaHelper";
 
 type AdventGridProps = {
   currentDate: Date;
@@ -15,13 +15,14 @@ export default function AdventGrid({
   const days = Array.from({ length: 25 }, (_, i) => i + 1);
 
   return (
-    <section className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 p-1">
+    <section className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 p-4 bg-linear-to-b from-white to-gray-50 rounded-xl shadow-md">
       {days
         .filter((day) => day !== activeCard)
         .map((day) => {
           const isUnlocked = currentDate.getDate() >= day;
           const isActive = activeCard === day;
-          const img = getImageForDay(day);
+          const media = getMediaForDay(day);
+          const thumbnailUrl = media?.imageUrl;
 
           return (
             <AdventCard
@@ -31,18 +32,29 @@ export default function AdventGrid({
               isUnlocked={isUnlocked}
               isActive={isActive}
               onClick={() => setActiveCard(isActive ? null : day)}
-              imageUrl={img}
+              media={media}
             >
               {isUnlocked ? (
                 <>
-                  {img && (
+                  {media?.videoUrl && !thumbnailUrl ? (
+                    <video
+                      src={media.videoUrl}
+                      poster={undefined}
+                      className="w-full h-24 object-cover rounded mb-2 blur"
+                      muted
+                      playsInline
+                      autoPlay
+                      loop
+                      preload="metadata"
+                    />
+                  ) : thumbnailUrl ? (
                     <img
-                      src={img}
+                      src={thumbnailUrl}
                       alt={`Day ${day}`}
-                      className="w-full h-24 object-cover rounded mb-2"
+                      className="w-full h-24 object-cover rounded mb-2 blur"
                       loading="lazy"
                     />
-                  )}
+                  ) : null}
                   <p>Unlocked!</p>
                 </>
               ) : undefined}
