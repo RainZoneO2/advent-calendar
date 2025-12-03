@@ -37,3 +37,5 @@ EXPOSE 3000
 VOLUME ["/app/public/media/calendar/user"]
 
 CMD ["npm", "run", "start"]
+
+LABEL org.opencontainers.image.source https://github.com/RainZoneO2/advent-calendar
