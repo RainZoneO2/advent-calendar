@@ -9,14 +9,28 @@ export type DayMedia = {
   audioUrl?: string | null;
 };
 
-const modules = import.meta.glob(
-  "../media/calendar/*.{png,jpg,jpeg,webp,mp4,webm,mp3,wav,ogg}",
+// Try to load from user folder first, fallback to samples
+const userModules = import.meta.glob(
+  "../media/calendar/user/*.{png,jpg,jpeg,webp,mp4,webm,mp3,wav,ogg}",
   {
     eager: true,
     query: "?url",
     import: "default",
   }
 ) as Record<string, string>;
+
+const samplesModules = import.meta.glob(
+  "../media/calendar/samples/*.{png,jpg,jpeg,webp,mp4,webm,mp3,wav,ogg}",
+  {
+    eager: true,
+    query: "?url",
+    import: "default",
+  }
+) as Record<string, string>;
+
+// Use user media if available, otherwise fall back to samples
+const modules =
+  Object.keys(userModules).length > 0 ? userModules : samplesModules;
 
 const images: AdventImage[] = Object.keys(modules).map((path) => ({
   src: modules[path],

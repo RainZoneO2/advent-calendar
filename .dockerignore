@@ -2,3 +2,13 @@
 build
 node_modules
 README.md
+DOCKER_README.md
+.git
+.gitignore
+.vscode
+.env
+.DS_Store
+*.log
+coverage
+.turbo
+app/media/calendar/user

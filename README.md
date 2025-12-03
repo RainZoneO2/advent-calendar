@@ -45,56 +45,34 @@ The app will be available at `http://localhost:3000`.
 
 ## Media Setup
 
-### Directory Structure
+Place media files in `media/calendar/user/`. If empty, sample media is used.
 
-Place your media files in the `media/calendar/` directory. Files are automatically detected by extension:
+**Supported formats:**
+
+- Images: `.png`, `.jpg`, `.jpeg`, `.webp`
+- Videos: `.mp4`, `.webm`
+- Audio: `.mp3`, `.wav`, `.ogg`
+
+**Folder structure:**
 
 ```
 media/calendar/
-├── 01-christmas.jpg
-├── 02-tree.mp4
-├── 03-carol.mp3
-├── 04-ornaments.webp
-└── ...
+├── user/        (add your custom media here)
+└── samples/     (included fallback)
 ```
 
-### Supported Formats
+**Manual configuration** (optional):
 
-- **Images**: `.png`, `.jpg`, `.jpeg`, `.webp`
-- **Videos**: `.mp4`, `.webm`
-- **Audio**: `.mp3`, `.wav`, `.ogg`
-
-### With Docker
-
-When using Docker, bind your media folder to the container:
-
-```bash
-docker run -p 3000:3000 -v /path/to/your/media:/app/public/media/calendar advent-calendar
-```
-
-Or with docker-compose (edit `docker-compose.yml` before running):
-
-```yaml
-volumes:
-  - /path/to/your/media:/app/public/media/calendar:ro
-```
-
-### Media Configuration
-
-You can optionally override media assignments in `app/media-config.json`:
+Override media per day in `app/media-config.json`:
 
 ```json
 {
-  "1": {
-    "imageUrl": "/media/calendar/01-custom.jpg",
-    "videoUrl": "/media/calendar/video.mp4",
-    "audioUrl": "/media/calendar/audio.mp3"
-  },
+  "1": { "imageUrl": "/media/calendar/user/custom.jpg", "videoUrl": null, "audioUrl": null },
   "2": { ... }
 }
 ```
 
-If not set, media is randomly shuffled and assigned to days.
+Otherwise media is randomly shuffled and assigned.
 
 ## Development
 
@@ -118,18 +96,31 @@ app/
 
 ## Deployment
 
-Build and deploy the production build:
+### Local Production
 
 ```bash
 npm run build
 npm start
 ```
 
-Or use Docker for containerized deployment:
+### Docker
+
+Build:
 
 ```bash
 docker build -t advent-calendar .
-docker run -p 3000:3000 -v /path/to/media:/app/public/media/calendar advent-calendar
+```
+
+Run locally:
+
+```bash
+docker run -p 3000:3000 -v ${PWD}/media/calendar/user:/app/public/media/calendar/user:ro advent-calendar
+```
+
+Run with docker-compose:
+
+```bash
+docker-compose up -d
 ```
 
 ## Environment

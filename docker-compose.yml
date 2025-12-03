@@ -3,10 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: advent-calendar
     ports:
       - "3000:3000"
     volumes:
-      - ./media/calendar:/app/public/media/calendar:ro
+      # Mount user media folder - app will use this if it has files, otherwise falls back to samples
+      - ./media/calendar/user:/app/public/media/calendar/user:ro
     environment:
       NODE_ENV: production
     restart: unless-stopped
