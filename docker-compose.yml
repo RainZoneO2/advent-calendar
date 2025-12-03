@@ -1,8 +1,6 @@
 services:
   advent-calendar:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/rainzoneo2/advent-calendar:main
     container_name: advent-calendar
     ports:
       - "3000:3000"

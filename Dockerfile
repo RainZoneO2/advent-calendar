@@ -15,9 +15,10 @@ WORKDIR /app
 RUN npm run build
 
 FROM node:20-alpine
-LABEL maintainer="RainZoneO2"
+LABEL org.opencontainers.image.authors="RainZoneO2"
 LABEL description="Advent Calendar web application with support for custom media (images, videos, audio) for each day"
 LABEL version="1.0"
+LABEL org.opencontainers.image.source=https://github.com/RainZoneO2/advent-calendar
 
 COPY ./package.json package-lock.json /app/
 COPY --from=production-dependencies-env /app/node_modules /app/node_modules
@@ -37,5 +38,3 @@ EXPOSE 3000
 VOLUME ["/app/public/media/calendar/user"]
 
 CMD ["npm", "run", "start"]
-
-LABEL org.opencontainers.image.source https://github.com/RainZoneO2/advent-calendar
