@@ -53,6 +53,31 @@
     background-origin: border-box;
     background-clip: padding-box, border-box;
   }
+
+  /* Dark mode adaptable cards */
+  .card-dark-adaptive {
+    @apply bg-white transition-colors duration-300;
+  }
+
+  .card-dark-adaptive:is(body.dark-mode *) {
+    @apply bg-gray-800;
+  }
+
+  .text-dark-adaptive {
+    @apply text-gray-900 transition-colors duration-300;
+  }
+
+  .text-dark-adaptive:is(body.dark-mode *) {
+    @apply text-gray-100;
+  }
+
+  .border-dark-adaptive {
+    @apply border-gray-200 transition-colors duration-300;
+  }
+
+  .border-dark-adaptive:is(body.dark-mode *) {
+    @apply border-gray-700;
+  }
 }
 
 @layer utilities {

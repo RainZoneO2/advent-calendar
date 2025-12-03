@@ -10,7 +10,7 @@ export type DayMedia = {
 };
 
 const modules = import.meta.glob(
-  "/app/media/calendar/*.{png,jpg,jpeg,webp,mp4,webm,mp3,wav,ogg}",
+  "../media/calendar/*.{png,jpg,jpeg,webp,mp4,webm,mp3,wav,ogg}",
   {
     eager: true,
     query: "?url",
@@ -43,22 +43,36 @@ function mulberry32(seed: number) {
   };
 }
 
-function buildImagesByDay(seed?: number) {
-  const srcs = images.map((i) => i.src);
-  const shuffled =
-    seed == null ? shuffleArray(srcs) : shuffleArray(srcs, mulberry32(seed));
+function buildMediaByDay(seed?: number) {
+  const imageExt = new Set(["png", "jpg", "jpeg", "webp", "gif"]);
+  const videoExt = new Set(["mp4", "webm", "mov"]);
+  const audioExt = new Set(["mp3", "wav", "ogg"]);
 
-  const byDay: string[] = Array.from(
-    { length: 25 },
-    (_, i) => shuffled[i % shuffled.length]
-  );
+  const pool: DayMedia[] = images.map((i) => {
+    const parts = i.filename.split(".");
+    const ext = parts.length > 1 ? parts.pop()!.toLowerCase() : "";
+    if (imageExt.has(ext)) return { imageUrl: i.src };
+    if (videoExt.has(ext)) return { videoUrl: i.src };
+    if (audioExt.has(ext)) return { audioUrl: i.src };
+
+    return { imageUrl: i.src };
+  });
+
+  if (pool.length === 0)
+    return Array.from({ length: 25 }, () => undefined as DayMedia | undefined);
+
+  const shuffledPool =
+    seed == null ? shuffleArray(pool) : shuffleArray(pool, mulberry32(seed));
+
+  const byDay: (DayMedia | undefined)[] = Array.from({ length: 25 }, (_, i) => {
+    return shuffledPool[i % shuffledPool.length];
+  });
 
   return byDay;
 }
 
-const IMAGES_BY_DAY = buildImagesByDay(42);
+const MEDIA_BY_DAY = buildMediaByDay(42);
 
-// Load media config (optional manual overrides for images/video/audio)
 import mediaConfigData from "../media-config.json";
 
 const MEDIA_CONFIG: Record<string, DayMedia> = mediaConfigData;
@@ -80,21 +94,21 @@ export function getMediaForDay(day: number): DayMedia | undefined {
     };
   }
 
-  const shuffledImage = IMAGES_BY_DAY[day - 1];
-  return shuffledImage ? { imageUrl: shuffledImage } : undefined;
+  const mapped = MEDIA_BY_DAY[day - 1];
+  return mapped || undefined;
 }
 
 export function getAllImages() {
-  return IMAGES_BY_DAY.slice();
+  return MEDIA_BY_DAY.map((m) => (m && m.imageUrl ? m.imageUrl : undefined));
 }
 
 export function createShuffledMapping(seed?: number) {
-  return buildImagesByDay(seed);
+  return buildMediaByDay(seed);
 }
 
 export default {
   getMediaForDay,
   getAllImages,
   createShuffledMapping,
-  IMAGES_BY_DAY,
+  MEDIA_BY_DAY,
 };
