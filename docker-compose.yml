@@ -1,11 +1,13 @@
 services:
   advent-calendar:
-    image: ghcr.io/rainzoneo2/advent-calendar:main
+    image: ghcr.io/rainzoneo2/advent-calendar:latest
     container_name: advent-calendar
     ports:
       - "3000:3000"
     volumes:
-      # Mount user media folder - app will use this if it has files, otherwise falls back to samples
+      # Mount user media folder at runtime
+      # Place custom media files in ./media/calendar/user/ on your host
+      # If empty, the app will fall back to built-in sample media
       - ./media/calendar/user:/app/public/media/calendar/user:ro
     environment:
       NODE_ENV: production

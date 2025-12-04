@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Route } from "./+types/home";
 import { AdventCard, AdventGrid } from "~/components";
 import { getMediaForDay } from "~/utils/mediaHelper";
 import type { LoaderFunctionArgs } from "react-router";
+import type { DayMedia } from "~/utils/mediaHelper";
 
 export function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -14,7 +15,23 @@ export function loader({ request }: LoaderFunctionArgs) {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [darkMode, setDarkMode] = useState(false);
-  const activeMedia = activeCard ? getMediaForDay(activeCard) : undefined;
+  const [activeMedia, setActiveMedia] = useState<DayMedia | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (!activeCard) {
+      setActiveMedia(undefined);
+      return;
+    }
+
+    const loadMedia = async () => {
+      const media = await getMediaForDay(activeCard);
+      setActiveMedia(media);
+    };
+
+    loadMedia();
+  }, [activeCard]);
 
   return (
     <main

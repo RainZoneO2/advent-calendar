@@ -1,5 +1,7 @@
 import { AdventCard } from "~/components";
 import { getMediaForDay } from "~/utils/mediaHelper";
+import { useState, useEffect } from "react";
+import type { DayMedia } from "~/utils/mediaHelper";
 
 type AdventGridProps = {
   currentDate: Date;
@@ -15,6 +17,26 @@ export default function AdventGrid({
   darkMode = false,
 }: AdventGridProps) {
   const days = Array.from({ length: 25 }, (_, i) => i + 1);
+  const [mediaCache, setMediaCache] = useState<
+    Record<number, DayMedia | undefined>
+  >({});
+
+  useEffect(() => {
+    const loadAllMedia = async () => {
+      const cache: Record<number, DayMedia | undefined> = {};
+
+      for (const day of days) {
+        if (!mediaCache[day]) {
+          const media = await getMediaForDay(day);
+          cache[day] = media;
+        }
+      }
+
+      setMediaCache((prev) => ({ ...prev, ...cache }));
+    };
+
+    loadAllMedia();
+  }, []);
 
   const formattedDate = currentDate.toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -58,7 +80,7 @@ export default function AdventGrid({
         .map((day) => {
           const isUnlocked = currentDate.getDate() >= day;
           const isActive = activeCard === day;
-          const media = getMediaForDay(day);
+          const media = mediaCache[day];
           const thumbnailUrl = media?.imageUrl;
 
           return (
