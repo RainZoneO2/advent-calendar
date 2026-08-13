@@ -1,5 +1,7 @@
 # Advent Calendar
 
+![CI](https://github.com/RainZoneO2/advent-calendar/actions/workflows/docker-publish.yml/badge.svg)
+
 A festive, interactive advent calendar web app built with React and TypeScript. Supports images, videos, and audio files for each day.
 
 ## Features
